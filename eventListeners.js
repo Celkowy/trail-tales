@@ -3,6 +3,7 @@ import { map, markersState } from './functions.js'
 const leftPanel = document.querySelector('.left-panel')
 const mapContainer = document.getElementById('map')
 const form = document.querySelector('form')
+const input = document.querySelector('input')
 
 leftPanel.addEventListener('mouseover', function () {
   mapContainer.classList.add('expand')
@@ -20,8 +21,37 @@ mapContainer.addEventListener('contextmenu', function (e) {
 
 export function goToMarker(lat, lng, element, map) {
   element.addEventListener('click', function () {
-    map.setView([lat, lng], 13)
+    markersState.forEach(marker => {
+      const { lat: markerLat, lng: markerLng } = marker._latlng
+      if (element.textContent == `${markerLat}, ${markerLng}`) {
+        styleMarkerOnElementClick(marker)
+      }
+    })
+    //option to unset it, so it doesn't zoom when you click an element
+    map.setView([lat, lng], 13, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    })
   })
+}
+
+function styleMarkerOnElementClick(marker) {
+  const divMarker = marker._icon
+  divMarker.classList.add('selected')
+
+  //the marker you selected by clicking an element should have z-index and be visible in the foreground
+  const width = divMarker.style.width.replace('px', '')
+  const height = divMarker.style.height.replace('px', '')
+  divMarker.style.width = Number(width) + 10 + 'px'
+  divMarker.style.height = Number(height) + 10 + 'px'
+
+  setTimeout(() => {
+    divMarker.classList.remove('selected')
+    divMarker.style.width = width + 'px'
+    divMarker.style.height = height + 'px'
+  }, 1500)
 }
 
 export function elementRightClick(lat, lng, element, markersState) {
@@ -52,3 +82,9 @@ export function mapOnClick() {
     displayActivities()
   })
 }
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault()
+  console.log(input.value)
+  input.value = ''
+})
