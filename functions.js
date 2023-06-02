@@ -16,12 +16,12 @@ export function displayActivities() {
   activitiesList.innerHTML = ''
   activitiesList.classList.add('active')
   const cordsList = JSON.parse(localStorage.getItem('cords')) || []
-  cordsList.forEach(([lat, lng, content]) => {
+  cordsList.forEach(([lat, lng, popupMsg]) => {
     const element = document.createElement('div')
     element.dataset.lat = lat
     element.dataset.lng = lng
     element.classList.add('element')
-    element.textContent = `${lat}, ${lng}, ${content}`
+    element.textContent = `${lat}, ${lng}, ${popupMsg}`
     goToMarker(lat, lng, element, map)
     elementRightClick(lat, lng, element, markersState)
     activitiesList.appendChild(element)
@@ -31,7 +31,7 @@ export function displayActivities() {
 export function drawMarkers() {
   markersState.length = 0
   const cordsArr = JSON.parse(localStorage.getItem('cords')) || []
-  cordsArr.forEach(([x, y, content]) => {
+  cordsArr.forEach(([x, y, popupMsg]) => {
     const marker = L.marker([x, y], { riseOnHover: true })
       .addTo(map)
       .bindPopup(
@@ -42,12 +42,12 @@ export function drawMarkers() {
           closeOnClick: false,
         })
       )
-      .setPopupContent(`${content}`)
+      .setPopupContent(popupMsg)
       .openPopup()
 
     markersState.push(marker)
-    marker.on('contextmenu', function (ev) {
-      const { lat, lng } = ev.latlng
+    marker.on('contextmenu', function (latlng) {
+      const { lat, lng } = latlng
       removeMarker(lat, lng, marker)
     })
   })
@@ -63,25 +63,25 @@ export function createMap(pos) {
 
 export function temporarilyHidePopups() {
   markersState.forEach(el => {
-    el._popup._container.style.opacity = 0
+    const { _popup: popup } = el
+    popup._container.style.opacity = 0
     setTimeout(() => {
-      el._popup._container.style.opacity = 1
+      popup._container.style.opacity = 1
     }, 1500)
   })
 }
 
 export function makeMarkerBigger(divMarker, element) {
-  const width = divMarker.style.width.replace('px', '')
-  const height = divMarker.style.height.replace('px', '')
-  divMarker.style.width = Number(width) + 10 + 'px'
-  divMarker.style.height = Number(height) + 10 + 'px'
+  const { width, height } = divMarker.style
+  divMarker.style.width = parseInt(width) + 10 + 'px'
+  divMarker.style.height = parseInt(height) + 10 + 'px'
   divMarker.classList.add('selected')
   element.style.pointerEvents = 'none'
 
   setTimeout(() => {
     divMarker.classList.remove('selected')
-    divMarker.style.width = width + 'px'
-    divMarker.style.height = height + 'px'
+    divMarker.style.width = width
+    divMarker.style.height = height
     element.style.pointerEvents = 'initial'
   }, 1500)
 }
