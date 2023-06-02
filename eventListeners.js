@@ -23,8 +23,8 @@ export function goToMarker(lat, lng, element, map) {
   element.addEventListener('click', function () {
     markersState.forEach(marker => {
       const { lat: markerLat, lng: markerLng } = marker._latlng
-      if (element.textContent == `${markerLat}, ${markerLng}`) {
-        styleMarkerOnElementClick(marker)
+      if (`${element.dataset.lat}, ${element.dataset.lng}` == `${markerLat}, ${markerLng}`) {
+        styleMarkerOnElementClick(marker, element)
       }
     })
     //option to unset it, so it doesn't zoom when you click an element
@@ -37,9 +37,10 @@ export function goToMarker(lat, lng, element, map) {
   })
 }
 
-function styleMarkerOnElementClick(marker) {
+function styleMarkerOnElementClick(marker, element) {
   const divMarker = marker._icon
   divMarker.classList.add('selected')
+  element.style.pointerEvents = 'none'
 
   //the marker you selected by clicking an element should have z-index and be visible in the foreground
   const width = divMarker.style.width.replace('px', '')
@@ -51,6 +52,7 @@ function styleMarkerOnElementClick(marker) {
     divMarker.classList.remove('selected')
     divMarker.style.width = width + 'px'
     divMarker.style.height = height + 'px'
+    element.style.pointerEvents = 'initial'
   }, 1500)
 }
 
@@ -70,21 +72,20 @@ export function elementRightClick(lat, lng, element, markersState) {
 export function mapOnClick() {
   map.on('click', function (ev) {
     const { lat, lng } = ev.latlng
-    const marker = L.marker([lat, lng], { riseOnHover: true }).addTo(map)
+    const marker = L.marker([lat, lng], { riseOnHover: true }).addTo(map).bindPopup(input.value).openPopup()
     marker.on('contextmenu', () => removeMarker(lat, lng, marker))
-
     const cordsArr = JSON.parse(localStorage.getItem('cords'))
-    cordsArr.push([lat, lng])
+    cordsArr.push([lat, lng, input.value])
     markersState.push(marker)
     localStorage.setItem('cords', JSON.stringify(cordsArr))
-
-    form.classList.add('active')
+    input.value = ''
+    input.focus()
     displayActivities()
   })
 }
 
 form.addEventListener('submit', function (e) {
   e.preventDefault()
-  console.log(input.value)
-  input.value = ''
 })
+
+// L.marker(cords).addTo(map).bindPopup('test').openPopup()

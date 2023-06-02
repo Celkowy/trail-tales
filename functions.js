@@ -16,10 +16,12 @@ export function displayActivities() {
   activitiesList.innerHTML = ''
   activitiesList.classList.add('active')
   const cordsList = JSON.parse(localStorage.getItem('cords')) || []
-  cordsList.forEach(([lat, lng]) => {
+  cordsList.forEach(([lat, lng, content]) => {
     const element = document.createElement('div')
+    element.dataset.lat = lat
+    element.dataset.lng = lng
     element.classList.add('element')
-    element.textContent = `${lat}, ${lng}`
+    element.textContent = `${lat}, ${lng}, ${content}`
     goToMarker(lat, lng, element, map)
     elementRightClick(lat, lng, element, markersState)
     activitiesList.appendChild(element)
@@ -29,8 +31,8 @@ export function displayActivities() {
 export function drawMarkers() {
   markersState.length = 0
   const cordsArr = JSON.parse(localStorage.getItem('cords')) || []
-  cordsArr.forEach(([x, y]) => {
-    const marker = L.marker([x, y], { riseOnHover: true }).addTo(map)
+  cordsArr.forEach(([x, y, content]) => {
+    const marker = L.marker([x, y], { riseOnHover: true }).addTo(map).bindPopup(content).openPopup()
     markersState.push(marker)
     marker.on('contextmenu', function (ev) {
       const { lat, lng } = ev.latlng

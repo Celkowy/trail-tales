@@ -63,28 +63,24 @@ body {
 }
 
 form {
-  display: none;
+  display: flex;
   width: auto;
-  opacity: 0;
   transition: 0.3s opacity ease-in-out;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 5px;
   margin: 5px;
   background-color: #fff;
-}
-
-form.active {
-  display: flex;
   justify-content: center;
   flex-direction: column;
-  opacity: 1;
 }
 
 input {
+  margin: 5px;
+  height: 30px;
   border-radius: 5px;
+  padding: 15px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin-bottom: 10px;
   outline: none;
 }
 
@@ -95,4 +91,5 @@ button {
 .selected {
   border: 2px dashed red;
   border-radius: 10px;
+  z-index: 999999 !important;
 }
