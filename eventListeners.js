@@ -1,4 +1,4 @@
-import { removeMarker, displayActivities } from './functions.js'
+import { removeMarker, displayActivities, temporarilyHidePopups, makeMarkerBigger } from './functions.js'
 import { map, markersState } from './functions.js'
 const leftPanel = document.querySelector('.left-panel')
 const mapContainer = document.getElementById('map')
@@ -24,7 +24,7 @@ export function goToMarker(lat, lng, element, map) {
     markersState.forEach(marker => {
       const { lat: markerLat, lng: markerLng } = marker._latlng
       if (`${element.dataset.lat}, ${element.dataset.lng}` == `${markerLat}, ${markerLng}`) {
-        styleMarkerOnElementClick(marker, element)
+        styleMarkerOnElementClick(marker._icon, element)
       }
     })
     //option to unset it, so it doesn't zoom when you click an element
@@ -37,23 +37,10 @@ export function goToMarker(lat, lng, element, map) {
   })
 }
 
-function styleMarkerOnElementClick(marker, element) {
-  const divMarker = marker._icon
-  divMarker.classList.add('selected')
-  element.style.pointerEvents = 'none'
-
-  //the marker you selected by clicking an element should have z-index and be visible in the foreground
-  const width = divMarker.style.width.replace('px', '')
-  const height = divMarker.style.height.replace('px', '')
-  divMarker.style.width = Number(width) + 10 + 'px'
-  divMarker.style.height = Number(height) + 10 + 'px'
-
-  setTimeout(() => {
-    divMarker.classList.remove('selected')
-    divMarker.style.width = width + 'px'
-    divMarker.style.height = height + 'px'
-    element.style.pointerEvents = 'initial'
-  }, 1500)
+function styleMarkerOnElementClick(divMarker, element) {
+  temporarilyHidePopups()
+  //checkbox to hide popups
+  makeMarkerBigger(divMarker, element)
 }
 
 export function elementRightClick(lat, lng, element, markersState) {
@@ -71,21 +58,32 @@ export function elementRightClick(lat, lng, element, markersState) {
 
 export function mapOnClick() {
   map.on('click', function (ev) {
-    const { lat, lng } = ev.latlng
-    const marker = L.marker([lat, lng], { riseOnHover: true }).addTo(map).bindPopup(input.value).openPopup()
-    marker.on('contextmenu', () => removeMarker(lat, lng, marker))
-    const cordsArr = JSON.parse(localStorage.getItem('cords'))
-    cordsArr.push([lat, lng, input.value])
-    markersState.push(marker)
-    localStorage.setItem('cords', JSON.stringify(cordsArr))
-    input.value = ''
-    input.focus()
-    displayActivities()
+    if (input.value) {
+      const { lat, lng } = ev.latlng
+      const marker = L.marker([lat, lng], { riseOnHover: true })
+        .addTo(map)
+        .bindPopup(
+          L.popup({
+            maxWidth: 250,
+            minWidth: 100,
+            autoClose: false,
+            closeOnClick: false,
+          })
+        )
+        .setPopupContent(`${input.value}`)
+        .openPopup()
+      marker.on('contextmenu', () => removeMarker(lat, lng, marker))
+      const cordsArr = JSON.parse(localStorage.getItem('cords'))
+      cordsArr.push([lat, lng, input.value])
+      markersState.push(marker)
+      localStorage.setItem('cords', JSON.stringify(cordsArr))
+      input.value = ''
+      input.focus()
+      displayActivities()
+    }
   })
 }
 
 form.addEventListener('submit', function (e) {
   e.preventDefault()
 })
-
-// L.marker(cords).addTo(map).bindPopup('test').openPopup()

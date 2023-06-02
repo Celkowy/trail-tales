@@ -5,14 +5,12 @@ if (!localStorage.getItem('cords')) localStorage.setItem('cords', '[]')
 
 navigator.geolocation.getCurrentPosition(
   function (pos) {
-    // L.marker(cords).addTo(map).bindPopup('test').openPopup()
     createMap(pos)
     mapOnClick()
+    drawMarkers()
+    displayActivities()
   },
   function () {
     console.log(`Couldn't load location data`)
   }
 )
-
-drawMarkers()
-displayActivities()

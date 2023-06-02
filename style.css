@@ -91,5 +91,13 @@ button {
 .selected {
   border: 2px dashed red;
   border-radius: 10px;
-  z-index: 999999 !important;
+  z-index: 999999 !important ;
+}
+
+.leaflet-popup-content {
+  text-align: center;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px !important;
 }
