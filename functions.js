@@ -3,9 +3,9 @@ const activitiesList = document.querySelector('.cords-list')
 export const map = L.map('map')
 export const markersState = []
 
-export function removeMarker(lat, lng, marker) {
+export function removeMarker(markersLat, markersLng, marker) {
   const cordsArr = JSON.parse(localStorage.getItem('cords'))
-  const indexToRemove = cordsArr.findIndex(element => element.toString() === [lat, lng].toString())
+  const indexToRemove = cordsArr.findIndex(([x, y]) => x === markersLat && y === markersLng)
   cordsArr.splice(indexToRemove, 1)
   localStorage.setItem('cords', JSON.stringify(cordsArr))
   marker.remove()
@@ -16,8 +16,7 @@ export function displayActivities() {
   activitiesList.innerHTML = ''
   activitiesList.classList.add('active')
   const cordsList = JSON.parse(localStorage.getItem('cords')) || []
-  cordsList.forEach(el => {
-    const [lat, lng] = el
+  cordsList.forEach(([lat, lng]) => {
     const element = document.createElement('div')
     element.classList.add('element')
     element.textContent = `${lat}, ${lng}`
@@ -28,15 +27,14 @@ export function displayActivities() {
 }
 
 export function drawMarkers() {
-  markersState.splice(0, markersState.length)
+  markersState.length = 0
   const cordsArr = JSON.parse(localStorage.getItem('cords')) || []
-  cordsArr.forEach(cords => {
-    const [x, y] = cords
-    const a = L.marker([x, y], { riseOnHover: true }).addTo(map)
-    markersState.push(a)
-    a.on('contextmenu', function (ev) {
+  cordsArr.forEach(([x, y]) => {
+    const marker = L.marker([x, y], { riseOnHover: true }).addTo(map)
+    markersState.push(marker)
+    marker.on('contextmenu', function (ev) {
       const { lat, lng } = ev.latlng
-      removeMarker(lat, lng, a)
+      removeMarker(lat, lng, marker)
     })
   })
 }

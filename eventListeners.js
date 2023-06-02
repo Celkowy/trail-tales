@@ -39,18 +39,16 @@ export function elementRightClick(lat, lng, element, markersState) {
 
 export function mapOnClick() {
   map.on('click', function (ev) {
-    form.classList.add('active')
-    const marker = L.marker([ev.latlng.lat, ev.latlng.lng], { riseOnHover: true }).addTo(map)
     const { lat, lng } = ev.latlng
+    const marker = L.marker([lat, lng], { riseOnHover: true }).addTo(map)
+    marker.on('contextmenu', () => removeMarker(lat, lng, marker))
+
     const cordsArr = JSON.parse(localStorage.getItem('cords'))
     cordsArr.push([lat, lng])
     markersState.push(marker)
-
-    marker.on('contextmenu', function () {
-      removeMarker(lat, lng, marker)
-    })
-
     localStorage.setItem('cords', JSON.stringify(cordsArr))
+
+    form.classList.add('active')
     displayActivities()
   })
 }
