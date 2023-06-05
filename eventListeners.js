@@ -37,6 +37,15 @@ export function goToMarker(lat, lng, element, map) {
   })
 }
 
+//better ui
+//jakiś bug przy right clicku na element
+//options:
+//1. dark mode
+//3. hide popups
+//4. show last added only
+
+//5. options div
+
 function styleMarkerOnElementClick(divMarker, element) {
   temporarilyHidePopups()
   //checkbox to hide popups

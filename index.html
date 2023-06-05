@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>trail-tales</title>
+    <link rel="icon" type="image/x-icon" href="/fav/favicon.png" />
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
@@ -23,10 +24,19 @@
     <script defer type="module" src="functions.js"></script>
   </head>
   <body>
+    <div class="map-options">
+      <label for="map-style">Map style</label>
+      <select id="map-style">
+        <option value="Default">Default</option>
+        <option value="Light">Light</option>
+        <option value="Dark">Dark</option>
+      </select>
+    </div>
+
     <div class="wrapper">
       <div class="left-panel">
         <form>
-          <input type="text" placeholder="Trail name" />
+          <input type="text" placeholder="Write first" maxlength="23" />
         </form>
         <div class="cords-list"></div>
       </div>

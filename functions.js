@@ -1,7 +1,15 @@
 import { goToMarker, elementRightClick } from './eventListeners.js'
 const activitiesList = document.querySelector('.cords-list')
+document.getElementById('map-style').addEventListener('change', changeMapStyle, true)
 export const map = L.map('map')
-export const markersState = []
+export let markersState = []
+let mapStyleState
+const mapStyle = {
+  Default: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+  Light: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  Dark: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+}
+let mapLayer
 
 export function removeMarker(markersLat, markersLng, marker) {
   const cordsArr = JSON.parse(localStorage.getItem('cords'))
@@ -21,7 +29,21 @@ export function displayActivities() {
     element.dataset.lat = lat
     element.dataset.lng = lng
     element.classList.add('element')
-    element.textContent = `${lat}, ${lng}, ${popupMsg}`
+    const [latToDisplay, lngToDisplay] = [lat.toString().slice(0, 5), lng.toString().slice(0, 5)]
+
+    //fix this. Other js file
+    element.innerHTML = `
+    <div class="popup-msg">${popupMsg}</div>
+    <div class="cords-wrapper">
+      <div class="lat">
+        <span>X</span>
+        <div>:&nbsp${latToDisplay}</div>
+      </div>
+      <div class="lng">
+        <span>Y</span>
+        <div>:&nbsp${lngToDisplay}</div>
+      </div>
+    </div>`
     goToMarker(lat, lng, element, map)
     elementRightClick(lat, lng, element, markersState)
     activitiesList.appendChild(element)
@@ -58,7 +80,18 @@ export function createMap(pos) {
   const coordinates = [latitude, longitude]
   const localStorageCords = JSON.parse(localStorage.getItem('cords'))
   map.setView(localStorageCords[localStorageCords.length - 1] || coordinates, 13)
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+  if (localStorage.getItem('mapStyleState') === null) {
+    localStorage.setItem('mapStyleState', 'Default')
+    mapStyleState = 'Default'
+  } else {
+    mapStyleState = localStorage.getItem('mapStyleState')
+  }
+
+  mapLayer = L.tileLayer(mapStyle[mapStyleState], {
+    attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  })
+  mapLayer.addTo(map)
+  setMapStyleSelectValue()
 }
 
 export function temporarilyHidePopups() {
@@ -85,3 +118,22 @@ export function makeMarkerBigger(divMarker, element) {
     element.style.pointerEvents = 'initial'
   }, 1500)
 }
+
+function changeMapStyle(e) {
+  e.preventDefault()
+  e.stopPropagation()
+  const mapStyleValue = e.currentTarget.value
+  mapLayer.setUrl(mapStyle[mapStyleValue])
+  mapStyleState = mapStyleValue
+  localStorage.setItem('mapStyleState', mapStyleValue)
+  setMapStyleSelectValue()
+}
+
+function setMapStyleSelectValue() {
+  const select = document.querySelector('select')
+  select.value = mapStyleState
+}
+
+//map attribution
+//dark - attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+//light - &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors
