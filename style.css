@@ -28,7 +28,6 @@ body {
   position: relative;
   width: 145px;
   height: 100%;
-  background-color: white;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   background-color: #555c6d;
@@ -224,4 +223,20 @@ label {
 .hide-popups {
   height: auto;
   cursor: pointer;
+}
+
+.clipboard-info {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, -100px);
+  color: white;
+  background-color: #9ca5e8;
+  border-radius: 7px;
+  padding: 5px;
+  transition: transform 0.5s ease;
+}
+
+.clipboard-info.active {
+  transform: translate(-50%, -42px);
 }

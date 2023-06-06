@@ -2,6 +2,7 @@ import { goToMarker, elementRightClick } from './eventListeners.js'
 import { elementLayout } from './elementLayout.js'
 
 const activitiesList = document.querySelector('.cords-list')
+const clipboardInfo = document.querySelector('.clipboard-info')
 
 document.getElementById('map-style').addEventListener('change', changeMapStyle, true)
 
@@ -29,7 +30,6 @@ export function removeMarker(markersLat, markersLng, marker) {
 
 export function displayActivities() {
   activitiesList.innerHTML = ''
-  activitiesList.classList.add('active')
   const cordsList = JSON.parse(localStorage.getItem('cords')) || []
   cordsList.forEach(([lat, lng, popupMsg]) => {
     const element = document.createElement('div')
@@ -39,8 +39,12 @@ export function displayActivities() {
     const [latToDisplay, lngToDisplay] = [lat.toString().slice(0, 5), lng.toString().slice(0, 5)]
     element.innerHTML = elementLayout(popupMsg, latToDisplay, lngToDisplay)
     const img = document.createElement('img')
-    img.addEventListener('click', function (e) {
+    img.addEventListener('click', function () {
       navigator.clipboard.writeText(`${lat} ${lng}`)
+      clipboardInfo.classList.add('active')
+      setTimeout(() => {
+        clipboardInfo.classList.remove('active')
+      }, 3000)
     })
     img.classList.add('clipboard')
     img.src = './fav/clipboard.png'
@@ -50,14 +54,6 @@ export function displayActivities() {
     elementRightClick(lat, lng, element, markersState)
 
     activitiesList.appendChild(element)
-
-    // console.log(element.closest('.clipboard'))
-    // const clipboard = document.querySelector('.clipboard')
-
-    // clipboard.addEventListener('click', function () {
-    //   // navigator.clipboard.writeText(`${element.dataset.lat} ${element.dataset.lng}`)
-    //   console.log(clipboard.value)
-    // })
   })
 }
 

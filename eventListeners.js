@@ -12,12 +12,17 @@ const mapContainer = document.getElementById('map')
 const form = document.querySelector('form')
 const input = document.querySelector('.marker-title')
 
-leftPanel.addEventListener('mouseover', function () {
+//legend what to do -> button with popup
+//hide click check it
+//left-panel expand fireing all the time
+
+leftPanel.addEventListener('mouseover', function (e) {
   mapContainer.classList.add('expand')
   leftPanel.classList.add('expand')
 })
 
-leftPanel.addEventListener('mouseout', function () {
+leftPanel.addEventListener('mouseout', function (e) {
+  if (e.target != e.currentTarget) return
   mapContainer.classList.remove('expand')
   leftPanel.classList.remove('expand')
 })
@@ -43,12 +48,6 @@ export function goToMarker(lat, lng, element, map) {
     })
   })
 }
-
-//clipboard only clipboards
-//legend what to do -> button with popup
-//hide click check it
-//left-panel expand fireing all the time
-//popup onclick fires gotoMarker
 
 function styleMarkerOnElementClick(divMarker, element, duration) {
   temporarilyHidePopups(duration)
