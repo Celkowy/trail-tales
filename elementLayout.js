@@ -1,5 +1,6 @@
 export function elementLayout(popupMsg, latToDisplay, lngToDisplay) {
   return `
+  <div class="flex">
   <div class="popup-msg">${popupMsg}</div>
   <div class="cords-wrapper">
     <div class="lat">
@@ -10,5 +11,7 @@ export function elementLayout(popupMsg, latToDisplay, lngToDisplay) {
       <span>Y</span>
       <div>:&nbsp${lngToDisplay}</div>
     </div>
-  </div>`
+  </div>
+  </div>
+  `
 }

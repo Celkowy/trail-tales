@@ -31,11 +31,11 @@ export function goToMarker(lat, lng, element, map) {
     markersState.forEach(marker => {
       const { lat: markerLat, lng: markerLng } = marker._latlng
       if (`${element.dataset.lat}, ${element.dataset.lng}` == `${markerLat}, ${markerLng}`) {
-        styleMarkerOnElementClick(marker._icon, element)
+        styleMarkerOnElementClick(marker._icon, element, 3000)
       }
     })
-    //option to unset it, so it doesn't zoom when you click an element
-    map.setView([lat, lng], 13, {
+    const zoom = map._zoom > 13 ? map._zoom : 13
+    map.setView([lat, lng], zoom, {
       animate: true,
       pan: {
         duration: 1,
@@ -44,14 +44,16 @@ export function goToMarker(lat, lng, element, map) {
   })
 }
 
-//3. hide popups //switch if they are disabled / localstorage
-//4. show last added only
+//clipboard only clipboards
 
-function styleMarkerOnElementClick(divMarker, element) {
-  //if tutaj
+//legend what to do -> button with popup
+//hide click check it
+//popup input always on top, sticky
+//left-panel expand fireing all the time
 
-  temporarilyHidePopups(1500)
-  makeMarkerBigger(divMarker, element)
+function styleMarkerOnElementClick(divMarker, element, duration) {
+  temporarilyHidePopups(duration)
+  makeMarkerBigger(divMarker, element, duration)
 }
 
 export function elementRightClick(lat, lng, element, markersState) {

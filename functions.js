@@ -1,7 +1,10 @@
 import { goToMarker, elementRightClick } from './eventListeners.js'
 import { elementLayout } from './elementLayout.js'
+
 const activitiesList = document.querySelector('.cords-list')
+
 document.getElementById('map-style').addEventListener('change', changeMapStyle, true)
+
 export const map = L.map('map')
 export let markersState = []
 let mapStyleState
@@ -35,9 +38,26 @@ export function displayActivities() {
     element.classList.add('element')
     const [latToDisplay, lngToDisplay] = [lat.toString().slice(0, 5), lng.toString().slice(0, 5)]
     element.innerHTML = elementLayout(popupMsg, latToDisplay, lngToDisplay)
+    const img = document.createElement('img')
+    img.addEventListener('click', function (e) {
+      navigator.clipboard.writeText(`${lat} ${lng}`)
+    })
+    img.classList.add('clipboard')
+    img.src = './fav/clipboard.png'
+    element.appendChild(img)
+
     goToMarker(lat, lng, element, map)
     elementRightClick(lat, lng, element, markersState)
+
     activitiesList.appendChild(element)
+
+    // console.log(element.closest('.clipboard'))
+    // const clipboard = document.querySelector('.clipboard')
+
+    // clipboard.addEventListener('click', function () {
+    //   // navigator.clipboard.writeText(`${element.dataset.lat} ${element.dataset.lng}`)
+    //   console.log(clipboard.value)
+    // })
   })
 }
 
@@ -59,6 +79,7 @@ export function drawMarkers() {
       .openPopup()
 
     markersState.push(marker)
+
     marker.on('contextmenu', function (latlng) {
       const { lat, lng } = latlng
       removeMarker(lat, lng, marker)
@@ -105,7 +126,7 @@ export function hidePopups(switcher) {
   })
 }
 
-export function makeMarkerBigger(divMarker, element) {
+export function makeMarkerBigger(divMarker, element, duration) {
   const { width, height } = divMarker.style
   divMarker.style.width = parseInt(width) + 10 + 'px'
   divMarker.style.height = parseInt(height) + 10 + 'px'
@@ -117,7 +138,7 @@ export function makeMarkerBigger(divMarker, element) {
     divMarker.style.width = width
     divMarker.style.height = height
     element.style.pointerEvents = 'initial'
-  }, 1500)
+  }, duration)
 }
 
 function changeMapStyle(e) {
