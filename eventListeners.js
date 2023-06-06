@@ -22,7 +22,7 @@ leftPanel.addEventListener('mouseover', function (e) {
 })
 
 leftPanel.addEventListener('mouseout', function (e) {
-  if (e.target != e.currentTarget) return
+  // if (e.target != e.currentTarget) return
   mapContainer.classList.remove('expand')
   leftPanel.classList.remove('expand')
 })
