@@ -25,6 +25,7 @@ body {
 }
 
 .left-panel {
+  position: relative;
   width: 145px;
   height: 100%;
   background-color: white;
@@ -37,7 +38,7 @@ body {
 
 .left-panel.expand {
   width: 250px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 #map {
@@ -75,15 +76,16 @@ body {
 }
 
 form {
+  position: sticky;
+  top: 5px;
+  z-index: 99999;
   display: flex;
-  width: auto;
-  transition: 0.3s opacity ease-in-out;
   border-radius: 7px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.363) 0px 3px 8px;
   padding: 5px;
   height: 76px;
+  background-color: #9ca5e8;
   margin: 5px;
-  background-color: #ffffffff;
   justify-content: center;
   flex-direction: column;
 }

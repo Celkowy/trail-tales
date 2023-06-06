@@ -45,11 +45,10 @@ export function goToMarker(lat, lng, element, map) {
 }
 
 //clipboard only clipboards
-
 //legend what to do -> button with popup
 //hide click check it
-//popup input always on top, sticky
 //left-panel expand fireing all the time
+//popup onclick fires gotoMarker
 
 function styleMarkerOnElementClick(divMarker, element, duration) {
   temporarilyHidePopups(duration)
