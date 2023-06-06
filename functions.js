@@ -37,7 +37,7 @@ export function displayActivities() {
     element.dataset.lng = lng
     element.classList.add('element')
     const [latToDisplay, lngToDisplay] = [lat.toString().slice(0, 5), lng.toString().slice(0, 5)]
-    element.innerHTML = elementLayout(popupMsg, latToDisplay, lngToDisplay)
+    element.innerHTML = elementLayout(latToDisplay, lngToDisplay, popupMsg)
     const img = document.createElement('img')
     img.addEventListener('click', function () {
       navigator.clipboard.writeText(`${lat} ${lng}`)
@@ -85,7 +85,7 @@ export function drawMarkers() {
 }
 
 export function createMap(pos) {
-  const { latitude, longitude } = pos.coords
+  const { latitude, longitude } = pos
   const coordinates = [latitude, longitude]
   const localStorageCords = JSON.parse(localStorage.getItem('cords'))
   map.setView(localStorageCords[localStorageCords.length - 1] || coordinates, 13)

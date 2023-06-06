@@ -1,6 +1,6 @@
-export function elementLayout(popupMsg, latToDisplay, lngToDisplay) {
+export function elementLayout(latToDisplay, lngToDisplay, popupMsg) {
   return `
-  <div class="flex">
+  <div>
   <div class="popup-msg">${popupMsg}</div>
   <div class="cords-wrapper">
     <div class="lat">

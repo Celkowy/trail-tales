@@ -37,7 +37,7 @@ body {
 
 .left-panel.expand {
   width: 250px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #map {
