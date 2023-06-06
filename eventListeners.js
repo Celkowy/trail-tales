@@ -1,9 +1,16 @@
-import { removeMarker, displayActivities, temporarilyHidePopups, makeMarkerBigger } from './functions.js'
+import {
+  removeMarker,
+  displayActivities,
+  temporarilyHidePopups,
+  makeMarkerBigger,
+  hidePopups,
+  checkbox,
+} from './functions.js'
 import { map, markersState } from './functions.js'
 const leftPanel = document.querySelector('.left-panel')
 const mapContainer = document.getElementById('map')
 const form = document.querySelector('form')
-const input = document.querySelector('input')
+const input = document.querySelector('.marker-title')
 
 leftPanel.addEventListener('mouseover', function () {
   mapContainer.classList.add('expand')
@@ -37,18 +44,13 @@ export function goToMarker(lat, lng, element, map) {
   })
 }
 
-//better ui
-//jakiś bug przy right clicku na element
-//options:
-//1. dark mode
-//3. hide popups
+//3. hide popups //switch if they are disabled / localstorage
 //4. show last added only
 
-//5. options div
-
 function styleMarkerOnElementClick(divMarker, element) {
-  temporarilyHidePopups()
-  //checkbox to hide popups
+  //if tutaj
+
+  temporarilyHidePopups(1500)
   makeMarkerBigger(divMarker, element)
 }
 
@@ -89,6 +91,7 @@ export function mapOnClick() {
       input.value = ''
       input.focus()
       displayActivities()
+      hidePopups(checkbox.checked)
     }
   })
 }

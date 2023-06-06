@@ -1,9 +1,13 @@
 import { goToMarker, elementRightClick } from './eventListeners.js'
+import { elementLayout } from './elementLayout.js'
 const activitiesList = document.querySelector('.cords-list')
 document.getElementById('map-style').addEventListener('change', changeMapStyle, true)
 export const map = L.map('map')
 export let markersState = []
 let mapStyleState
+export const checkbox = document.querySelector('.hide-popups')
+export let hidePopupsState = localStorage.getItem('hidePopups') || localStorage.setItem('hidePopups', 'false')
+if (hidePopupsState === 'true') checkbox.checked = true
 const mapStyle = {
   Default: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
   Light: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -30,20 +34,7 @@ export function displayActivities() {
     element.dataset.lng = lng
     element.classList.add('element')
     const [latToDisplay, lngToDisplay] = [lat.toString().slice(0, 5), lng.toString().slice(0, 5)]
-
-    //fix this. Other js file
-    element.innerHTML = `
-    <div class="popup-msg">${popupMsg}</div>
-    <div class="cords-wrapper">
-      <div class="lat">
-        <span>X</span>
-        <div>:&nbsp${latToDisplay}</div>
-      </div>
-      <div class="lng">
-        <span>Y</span>
-        <div>:&nbsp${lngToDisplay}</div>
-      </div>
-    </div>`
+    element.innerHTML = elementLayout(popupMsg, latToDisplay, lngToDisplay)
     goToMarker(lat, lng, element, map)
     elementRightClick(lat, lng, element, markersState)
     activitiesList.appendChild(element)
@@ -73,6 +64,7 @@ export function drawMarkers() {
       removeMarker(lat, lng, marker)
     })
   })
+  if (checkbox.checked) hidePopups(checkbox.checked)
 }
 
 export function createMap(pos) {
@@ -94,13 +86,22 @@ export function createMap(pos) {
   setMapStyleSelectValue()
 }
 
-export function temporarilyHidePopups() {
+export function temporarilyHidePopups(duration) {
   markersState.forEach(el => {
     const { _popup: popup } = el
     popup._container.style.opacity = 0
-    setTimeout(() => {
-      popup._container.style.opacity = 1
-    }, 1500)
+    if (!checkbox.checked) {
+      setTimeout(() => {
+        popup._container.style.opacity = 1
+      }, duration)
+    }
+  })
+}
+
+export function hidePopups(switcher) {
+  markersState.forEach(el => {
+    const { _popup: popup } = el
+    popup._container.style.opacity = switcher ? 0 : 1
   })
 }
 
@@ -133,6 +134,11 @@ function setMapStyleSelectValue() {
   const select = document.querySelector('select')
   select.value = mapStyleState
 }
+
+checkbox.addEventListener('change', function () {
+  hidePopups(checkbox.checked)
+  localStorage.setItem('hidePopups', checkbox.checked)
+})
 
 //map attribution
 //dark - attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
