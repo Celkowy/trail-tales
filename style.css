@@ -109,6 +109,7 @@ input {
 
 button {
   width: 50px;
+  outline: none;
 }
 
 .selected {

@@ -18,11 +18,7 @@ const background = document.querySelector('.background')
 const removeAllMarkersButton = document.querySelector('.remove-all-markers')
 const legendButton = document.querySelector('.legend')
 
-!localStorage.getItem('hidePopups') ? openLegend() : localStorage.setItem('firstEntry', 'no')
-
-//legend what to do -> button with popup
-//hide click check it
-//show legend on the first entry of the page / localstorage
+!localStorage.getItem('hidePopups') ? openPopup('legend') : localStorage.setItem('firstEntry', 'no')
 
 leftPanel.addEventListener('mouseover', function (e) {
   mapContainer.classList.add('expand')

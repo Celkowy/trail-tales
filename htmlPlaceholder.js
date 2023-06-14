@@ -5,18 +5,18 @@ export default function html(option) {
     <div class="legend-content">
       <ul>
         <li>
-          <span class="underline">To create marker</span> - write a name in the input first and then left click on the map.
-          Once created, activity with the name and coordinates will be displayed on the left panel
+          <span class="underline">To create marker</span> - write a name in the input first and then left-click on the map.
+          Once created, an activity with the name and coordinates will be displayed on the left panel
         </li>
         <li>
-          <span class="underline">To remove marker</span> - right click the marker on the map or right click the activity on
+          <span class="underline">To remove marker</span> - right-click the marker on the map or right-click the activity on
           the left panel
         </li>
         <li>
           <span class="underline">Copy coordinates to clipboard</span> - hover over the left panel to expand the activities.
           Once expanded, click a clipboard icon
         </li>
-        <li><span class="underline">Center the marker</span> - left click on the activity on the left panel</li>
+        <li><span class="underline">Center the marker</span> - left-click on the activity on the left panel</li>
         <li><span class="underline">Available options</span></li>
         <ul>
           <li>Show legend</li>
