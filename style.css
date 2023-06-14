@@ -151,6 +151,16 @@ button {
   justify-content: space-evenly;
 }
 
+.map-options > button {
+  background-color: #fff;
+  border-radius: 7px;
+  padding: 5px 15px;
+}
+
+.map-options > button:active {
+  transform: scale(0.98);
+}
+
 .clipboard {
   display: none;
 }
@@ -164,7 +174,7 @@ button {
 }
 
 .clipboard:active {
-  transform: scale(0.8);
+  transform: scale(0.85);
 }
 
 span {
