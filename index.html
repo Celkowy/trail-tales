@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
@@ -25,8 +38,12 @@
     <script defer type="module" src="elementLayout.js"></script>
   </head>
   <body>
+    <div class="background"></div>
     <div class="clipboard-info">Coordinates have been added to the clipboard</div>
+    <div class="popup-to-remove"></div>
     <div class="map-options">
+      <button class="legend">Legend</button>
+      <button class="remove-all-markers">Remove all markers</button>
       <div class="checkbox">
         <label for="checkbox">Hide popups</label>
         <input type="checkbox" class="hide-popups" />
@@ -36,7 +53,7 @@
         <select id="map-style">
           <option value="Default">Default</option>
           <option value="Light">Light</option>
-          <option value="Dark">Dark</option>
+          <option value="Dark">Dark (works locally only)</option>
         </select>
       </div>
     </div>

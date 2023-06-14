@@ -19,7 +19,7 @@ const mapStyle = {
 }
 let mapLayer
 
-export function removeMarker(markersLat, markersLng, marker) {
+export function removeMarker(marker, markersLat, markersLng) {
   const cordsArr = JSON.parse(localStorage.getItem('cords'))
   const indexToRemove = cordsArr.findIndex(([x, y]) => x === markersLat && y === markersLng)
   cordsArr.splice(indexToRemove, 1)
@@ -78,7 +78,7 @@ export function drawMarkers() {
 
     marker.on('contextmenu', function (latlng) {
       const { lat, lng } = latlng
-      removeMarker(lat, lng, marker)
+      removeMarker(marker, lat, lng)
     })
   })
   if (checkbox.checked) hidePopups(checkbox.checked)
@@ -150,6 +150,22 @@ function changeMapStyle(e) {
 function setMapStyleSelectValue() {
   const select = document.querySelector('select')
   select.value = mapStyleState
+}
+
+export function handleRemoveAllMarkersPopup(popupToRemove, background, e) {
+  popupToRemove.classList.remove('active')
+  background.classList.remove('active')
+  if (e.srcElement.className === 'yes') {
+    removeAllMarkers()
+  }
+}
+
+function removeAllMarkers() {
+  localStorage.setItem('cords', '[]')
+  markersState.forEach(marker => {
+    removeMarker(marker)
+  })
+  markersState.length = 0
 }
 
 checkbox.addEventListener('change', function () {

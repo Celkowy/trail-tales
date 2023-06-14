@@ -13,6 +13,7 @@ body {
   padding: 50px;
   font-family: 'Nunito', sans-serif;
   background-color: #333a49;
+  overflow: hidden;
 }
 
 .wrapper {
@@ -227,9 +228,9 @@ label {
 
 .clipboard-info {
   position: absolute;
-  top: 50px;
+  bottom: -50px;
   left: 50%;
-  transform: translate(-50%, -100px);
+  transform: translate(-50%, -50%);
   color: white;
   background-color: #9ca5e8;
   border-radius: 7px;
@@ -238,5 +239,76 @@ label {
 }
 
 .clipboard-info.active {
-  transform: translate(-50%, -42px);
+  transform: translate(-50%, -59px);
+}
+
+.remove-all-markers,
+.legend {
+  width: auto;
+  margin-right: 30px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.popup-to-remove {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999999;
+  width: 400px;
+  height: 150px;
+  background-color: #9ca5e8;
+  border-radius: 7px;
+  color: white;
+  /* display: none; */
+}
+
+.button-container {
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.popup-to-remove.active {
+  display: flex;
+}
+
+i {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 21px;
+  z-index: 9999999999;
+  cursor: pointer;
+}
+
+.background {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999999;
+}
+.background.active {
+  display: inline;
+  background-color: black;
+  opacity: 0.5;
+}
+
+.button-container > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 30px;
+  border-radius: 7px;
 }

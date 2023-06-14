@@ -5,16 +5,19 @@ import {
   makeMarkerBigger,
   hidePopups,
   checkbox,
+  handleRemoveAllMarkersPopup,
 } from './functions.js'
 import { map, markersState } from './functions.js'
 const leftPanel = document.querySelector('.left-panel')
 const mapContainer = document.getElementById('map')
 const form = document.querySelector('form')
 const input = document.querySelector('.marker-title')
+const popupToRemove = document.querySelector('.popup-to-remove')
+const background = document.querySelector('.background')
+const removeAllMarkersButton = document.querySelector('.remove-all-markers')
 
 //legend what to do -> button with popup
 //hide click check it
-//left-panel expand fireing all the time
 
 leftPanel.addEventListener('mouseover', function (e) {
   mapContainer.classList.add('expand')
@@ -22,7 +25,6 @@ leftPanel.addEventListener('mouseover', function (e) {
 })
 
 leftPanel.addEventListener('mouseout', function (e) {
-  // if (e.target != e.currentTarget) return
   mapContainer.classList.remove('expand')
   leftPanel.classList.remove('expand')
 })
@@ -62,7 +64,7 @@ export function elementRightClick(lat, lng, element, markersState) {
     markersState.forEach(marker => {
       const { lat: markerLat, lng: markerLng } = marker._latlng
       const markerCords = `${markerLat}${markerLng}`
-      if (markerCords === elementCords) removeMarker(lat, lng, marker)
+      if (markerCords === elementCords) removeMarker(marker, lat, lng)
     })
   })
 }
@@ -83,7 +85,7 @@ export function mapOnClick() {
         )
         .setPopupContent(`${input.value}`)
         .openPopup()
-      marker.on('contextmenu', () => removeMarker(lat, lng, marker))
+      marker.on('contextmenu', () => removeMarker(marker, lat, lng))
       const cordsArr = JSON.parse(localStorage.getItem('cords'))
       cordsArr.push([lat, lng, input.value])
       markersState.push(marker)
@@ -98,4 +100,27 @@ export function mapOnClick() {
 
 form.addEventListener('submit', function (e) {
   e.preventDefault()
+})
+
+removeAllMarkersButton.addEventListener('click', () => {
+  popupToRemove.innerHTML = `
+  <i class="fa-solid fa-xmark"></i>
+  <div>Do you want to remove all the markers?</div>
+  <div class="button-container"><button class="yes">Yes</button> <button class="no">No</button></div>
+  `
+  popupToRemove.classList.add('active')
+  background.classList.add('active')
+
+  const yesButton = document.querySelector('.yes')
+  const noButton = document.querySelector('.no')
+  const exit = document.querySelector('.fa-xmark')
+
+  yesButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
+  noButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
+  exit.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
+})
+
+background.addEventListener('click', () => {
+  popupToRemove.classList.remove('active')
+  background.classList.remove('active')
 })
