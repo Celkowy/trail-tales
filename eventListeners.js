@@ -8,6 +8,7 @@ import {
   handleRemoveAllMarkersPopup,
 } from './functions.js'
 import { map, markersState } from './functions.js'
+import html from './htmlPlaceholder.js'
 const leftPanel = document.querySelector('.left-panel')
 const mapContainer = document.getElementById('map')
 const form = document.querySelector('form')
@@ -106,26 +107,8 @@ form.addEventListener('submit', function (e) {
   e.preventDefault()
 })
 
-removeAllMarkersButton.addEventListener('click', () => {
-  popupToRemove.innerHTML = `
-  <i class="fa-solid fa-xmark"></i>
-  <div>Do you want to remove all the markers?</div>
-  <div class="button-container"><button class="yes">Yes</button> <button class="no">No</button></div>
-  `
-  popupToRemove.classList.add('active')
-  background.classList.add('active')
-
-  const yesButton = document.querySelector('.yes')
-  const noButton = document.querySelector('.no')
-  const exit = document.querySelector('.fa-xmark')
-
-  yesButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
-  noButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
-  exit.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
-})
-
 legendButton.addEventListener('click', () => {
-  openLegend()
+  openPopup('legend')
 })
 
 background.addEventListener('click', () => {
@@ -133,38 +116,20 @@ background.addEventListener('click', () => {
   background.classList.remove('active')
 })
 
-function openLegend() {
-  popupToRemove.innerHTML = `
-  <i class="fa-solid fa-xmark"></i>
-  <div class="legend-content">
-    <ul>
-      <li>
-        <span class="underline">To create marker</span> - write a name in the input first and then left click on the map.
-        Once created, activity with the name and coordinates will be displayed on the left panel
-      </li>
-      <li>
-        <span class="underline">To remove marker</span> - right click the marker on the map or right click the activity on
-        the left panel
-      </li>
-      <li>
-        <span class="underline">Copy coordinates to clipboard</span> - hover over the left panel to expand the activities.
-        Once expanded, click a clipboard icon
-      </li>
-      <li><span class="underline">Center the marker</span> - left click on the activity on the left panel</li>
-      <li><span class="underline">Available options</span></li>
-      <ul>
-        <li>Show legend</li>
-        <li>Remove all markers</li>
-        <li>Hide markers popups</li>
-        <li>Change map style</li>
-      </ul>
-      <li>
-        <span class="underline">All data is stored in local storage</span> - so you can come back to the page anytime and
-        your saved activities and all settings will persist
-      </li>
-    </ul>
-  </div>
-  `
+removeAllMarkersButton.addEventListener('click', () => {
+  openPopup('removeAllMarkers')
+})
+
+function openPopup(option) {
+  popupToRemove.innerHTML = html(option)
+
+  if (option === 'removeAllMarkers') {
+    const yesButton = document.querySelector('.yes')
+    const noButton = document.querySelector('.no')
+    yesButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
+    noButton.addEventListener('click', handleRemoveAllMarkersPopup.bind(null, popupToRemove, background))
+  }
+
   popupToRemove.classList.add('active')
   background.classList.add('active')
   const exit = document.querySelector('.fa-xmark')
